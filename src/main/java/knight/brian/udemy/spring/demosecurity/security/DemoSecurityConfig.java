@@ -39,8 +39,9 @@ public class DemoSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.authorizeHttpRequests(configurer ->
-                configurer
+        httpSecurity
+                .authorizeHttpRequests(configurer ->
+                    configurer
                         .requestMatchers("/").hasRole("EMPLOYEE")
                         .requestMatchers("/leaders/**").hasRole("MANAGER")
                         .requestMatchers("/systems/**").hasRole("ADMIN")
@@ -52,7 +53,9 @@ public class DemoSecurityConfig {
                         .loginProcessingUrl("/authenticateTheUser")
                         .permitAll()
                 )
-                .logout(LogoutConfigurer::permitAll);
+                .logout(LogoutConfigurer::permitAll)
+                .exceptionHandling(configurer ->
+                        configurer.accessDeniedPage("/access-denied"));
 
         return httpSecurity.build();
     }
